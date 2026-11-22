@@ -4,7 +4,7 @@ title: "About"
 
 ## Two kinds of content
 
-**Facts** are extracted by script from theLIST open data, through the [thelist-opendata mirror](https://source.coop/mdsumner/thelist-opendata). They are reproducible: `scripts/queue.py` and `scripts/extract.py` rebuild every table in `data/`.
+**Facts** are extracted by script from theLIST open data, through the [thelist-opendata mirror](https://source.coop/mdsumner/thelist-opendata). They are reproducible: `scripts/build_queue.py` and `scripts/extract.py` rebuild every table in `data/`.
 
 **Claims** are statements about a place's history. Each one is a row in `data/claims.csv` with its source and a link. Claims from secondary sources say so, and name the work they cite. A claim can be corrected or removed without touching anything else.
 

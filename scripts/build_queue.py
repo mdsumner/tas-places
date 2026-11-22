@@ -3,7 +3,7 @@
 A candidate is a freehold property ID (PID) that has a property name in the
 address points, a heritage register entry, or a row in data/seeds.csv.
 
-Usage: python3 scripts/queue.py <mirror dir> [data dir] [half_km]
+Usage: python3 scripts/build_queue.py <mirror dir> [data dir] [half_km]
 """
 import sys
 import numpy as np

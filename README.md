@@ -27,7 +27,7 @@ and places link to each other.
 | `data/claims.csv` | sourced history claims, keyed by PID |
 | `data/seeds.csv` | places added to the queue by hand |
 | `data/reports.csv` | which report covers which places, by theme |
-| `scripts/` | `queue.py`, `extract.py`, `build_site.py`, `resolve.py`, `fetch_mirror.sh` |
+| `scripts/` | `build_queue.py`, `extract.py`, `build_site.py`, `resolve.py`, `fetch_mirror.sh` |
 | `properties/`, `geotech/` | reports, one folder per theme |
 | `places/` | generated place pages (not committed) |
 
@@ -37,7 +37,7 @@ Needs Python with pandas, pyarrow, geopandas and rasterio.
 
 ```sh
 scripts/fetch_mirror.sh mirror          # about 1 GB from the thelist-opendata mirror
-python3 scripts/queue.py mirror data    # candidate queue
+python3 scripts/build_queue.py mirror data    # candidate queue
 python3 scripts/extract.py mirror data  # facts for the selected places
 ```
 
