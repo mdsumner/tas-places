@@ -7,9 +7,11 @@ and are not committed; the publish workflow runs this before quarto render.
 Usage: python3 scripts/build_site.py
 """
 import json
+import os
 import pandas as pd
 
 D = "data"
+os.makedirs("places", exist_ok=True)
 places = pd.read_parquet(f"{D}/places.parquet")
 titles = pd.read_parquet(f"{D}/place_titles.parquet")
 zones = pd.read_parquet(f"{D}/place_zones.parquet")
