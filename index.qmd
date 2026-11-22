@@ -1,0 +1,28 @@
+---
+title: "Tasmanian places"
+subtitle: "A knowledge base of places, built from open data and sourced history"
+toc: false
+---
+
+This site collects what open data and published sources say about places in Tasmania, one place at a time. It started with a simple question: *what can theLIST tell me about a property?*
+
+## How it is organised
+
+**[Places](places/index.qmd)** are the hub. A place is a property in theLIST cadastre. Each place page holds its extracted facts (titles, area, buildings, zones, fire history, elevation, rivers, heritage entries), its sourced history, a map, and links to connected places.
+
+**Themes** are reasons for asking. A report is written for one theme and links back to its places:
+
+- **[Properties](properties/index.qmd)**: what and where a property is, its history and structures, and why it is hard to find on theLIST.
+- **[Geotech](geotech/index.qmd)**: desk-study packs for a site visit, covering ground, water, hazards, services and contamination history.
+
+More themes can be added as questions arise, for example climate and weather records, or what satellite imagery shows over time.
+
+## How it grows
+
+Places are worked through from a [ranked queue](places/index.qmd#next-in-the-queue): larger properties first, with a bias towards those closer to Hobart. Anyone can [request a place](request.qmd) or add a question about one.
+
+As places are added they link to each other through shared rivers, boundaries, fires and named features, and later through people and events in their histories.
+
+## What it is not
+
+It is not an authoritative record. theLIST, Heritage Tasmania and the archives are. See [About](about.qmd) for the rules on sources, people and sensitive history.

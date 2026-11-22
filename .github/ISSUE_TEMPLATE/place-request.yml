@@ -1,0 +1,40 @@
+name: Place request
+description: Ask for a place to be added, or for a question about a place to be looked at.
+title: "Place request: "
+labels: ["place-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A workflow will search theLIST open data for the place and comment with the candidates it finds.
+        Please do not include personal information about owners or residents.
+  - type: input
+    id: place
+    attributes:
+      label: Place
+      description: A property name, a street address, or a LIST property ID (PID).
+      placeholder: "Sherwood, or 43 Regent Street Dynnyrne, or 1995732"
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options:
+        - properties (what and where it is, history, structures)
+        - geotech (desk-study pack for a site visit)
+        - other (describe below)
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why are you interested in this place?
+      description: This decides which sources are used.
+    validations:
+      required: true
+  - type: textarea
+    id: questions
+    attributes:
+      label: Specific questions or details
+      description: Anything you already know, sources to check, or things you want confirmed.

@@ -1,0 +1,43 @@
+---
+title: "About"
+---
+
+## Two kinds of content
+
+**Facts** are extracted by script from theLIST open data, through the [thelist-opendata mirror](https://source.coop/mdsumner/thelist-opendata). They are reproducible: `scripts/queue.py` and `scripts/extract.py` rebuild every table in `data/`.
+
+**Claims** are statements about a place's history. Each one is a row in `data/claims.csv` with its source and a link. Claims from secondary sources say so, and name the work they cite. A claim can be corrected or removed without touching anything else.
+
+Reports and place pages are renderings of these two. When the data grows, the pages get richer.
+
+## What a place is
+
+A place is a property ID (PID) in theLIST cadastre: one or more freehold titles grouped as one property. This has limits:
+
+- One farm business can be split across several PIDs, and so appears as several places.
+- A heritage listing can cover one title of a much larger property.
+- Strata lots and public land are not places yet.
+- Areas are sums of titles sharing a PID. They are not original land grants.
+
+## Rules
+
+- **No ownership.** Current owners are not recorded, and are not in the open data.
+- **No living people**, beyond what is already on the public record in the cited source.
+- **Aboriginal history** is recorded only as the cited sources state it, with the source named. It needs more care and consultation than this project has yet given it.
+- **Inference is labelled.** Where a match is a judgement (which building is the homestead, where a tunnel is), the page says so.
+
+## Data and licence
+
+- theLIST open data is (c) State of Tasmania, licensed CC BY 3.0 AU. This project is not endorsed by Land Tasmania.
+- Terrain uses the Tasmanian statewide 2 m DEM published on [Source Cooperative](https://source.coop/alexgleith/tasmania-dem-2m).
+- Values reflect the mirror at the time of extraction. theLIST is the current, authoritative source.
+
+## Repository layout
+
+| Path | Holds |
+|---|---|
+| `data/` | the tables (Parquet), `claims.csv`, `seeds.csv`, `reports.csv` |
+| `scripts/` | queue, extraction, site generation, and the request resolver |
+| `properties/`, `geotech/` | reports, one folder per theme |
+| `places/` | generated place pages (built by `scripts/build_site.py`, not committed) |
+| `.github/` | the request form and workflows |

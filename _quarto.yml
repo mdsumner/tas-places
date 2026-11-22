@@ -1,0 +1,35 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "properties/*.qmd"
+    - "geotech/*.qmd"
+    - "places/*.qmd"
+
+website:
+  title: "Tasmanian places"
+  site-url: https://mdsumner.github.io/tas-places/
+  repo-url: https://github.com/mdsumner/tas-places
+  repo-actions: [issue]
+  navbar:
+    left:
+      - text: Places
+        href: places/index.qmd
+      - text: Properties
+        href: properties/index.qmd
+      - text: Geotech
+        href: geotech/index.qmd
+      - text: Request a place
+        href: request.qmd
+      - text: About
+        href: about.qmd
+  page-footer:
+    center: "Facts from theLIST open data (c) State of Tasmania, CC BY 3.0 AU. Not endorsed by Land Tasmania."
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    include-in-header: assets/leaflet.html

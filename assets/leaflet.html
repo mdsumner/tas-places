@@ -1,0 +1,40 @@
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<style>
+.place-map { height: 420px; margin: 0.5rem 0 0.75rem 0; border: 1px solid #d0d0d0; border-radius: 4px; }
+.place-map.tall { height: 560px; }
+</style>
+<script>
+// Draw place outlines (GeoJSON, lon/lat) and optional queue points on a Leaflet map.
+function tasPlacesMap(id, outlines, points) {
+  var streets = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+    { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' });
+  var imagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { maxZoom: 19, attribution: 'Imagery &copy; Esri and its data providers' });
+  var map = L.map(id, { layers: [streets], scrollWheelZoom: false });
+  L.control.layers({ 'Streets': streets, 'Imagery': imagery }).addTo(map);
+  var layer = L.geoJSON(outlines, {
+    style: function (f) {
+      return f.properties.focus
+        ? { color: '#d35400', weight: 2.5, fillColor: '#f39c12', fillOpacity: 0.25 }
+        : { color: '#1f618d', weight: 1.5, fillColor: '#5dade2', fillOpacity: 0.12 };
+    },
+    onEachFeature: function (f, l) {
+      var p = f.properties, name = p.display_name;
+      l.bindPopup(p.page ? '<a href="' + p.page + '">' + name + '</a>' : name + ' (PID ' + p.PID + ')');
+    }
+  }).addTo(map);
+  if (points) {
+    points.forEach(function (d) {
+      if (d.p) { return; }
+      L.circleMarker([d.y, d.x], { radius: 3, color: '#566573', weight: 1, fillOpacity: 0.6 })
+        .bindPopup(d.n + ' (rank ' + d.r + ')').addTo(map);
+    });
+    map.setView([-42.0, 146.8], 7);
+  } else if (layer.getLayers().length) {
+    map.fitBounds(layer.getBounds().pad(0.15));
+  } else {
+    map.setView([-42.0, 146.8], 7);
+  }
+}
+</script>

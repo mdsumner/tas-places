@@ -1,0 +1,30 @@
+---
+title: "Geotech"
+listing:
+  id: reports
+  contents: "*.qmd"
+  type: default
+  sort: "title"
+  fields: [title, description, categories]
+---
+
+Desk-study packs: what someone doing a site assessment would want on hand before going to site. They follow the questions a geotechnical desk study asks: what is underground, where the water is, what could move, what might be contaminated, what is buried, and how to get access.
+
+A pack is built only from open data. It is an aid for a desk study, and it does not replace a site inspection, title search, service location or professional assessment.
+
+## What a pack draws on
+
+| Question | In the mirror | Still to source |
+|---|---|---|
+| Ground surface | 2 m LiDAR DEM, contours, survey control | |
+| Geology | | MRT 1:25,000 geology, MRT boreholes |
+| Soils | soil mapping, sample sites, acid sulfate soil layers | |
+| Groundwater | bore locations and summary fields | NRE driller logs and water levels |
+| Flooding | hydrography, flood models, historic flood extents | |
+| Ground movement | landslide planning bands | MRT landslide inventory |
+| Contamination | EPA regulated sites, aerial photo index | fuel tank and dangerous-goods registers |
+| Buried services | water, sewer, power and gas corridor layers, easements | Before You Dig request |
+| Planning | zones and code overlays | |
+
+:::{#reports}
+:::

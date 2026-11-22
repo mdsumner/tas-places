@@ -1,0 +1,100 @@
+name: Place request
+
+# Two ways in:
+#  - an issue opened from the place-request form (label: place-request)
+#  - a manual run with a place, theme and reason, which opens the issue itself
+# Either way the place is searched in theLIST open data and the candidates are
+# posted as a comment on the issue.
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      place:
+        description: "Property name, street address, or LIST property ID"
+        required: true
+        type: string
+      theme:
+        description: "Theme"
+        required: true
+        type: choice
+        default: properties
+        options: [properties, geotech, other]
+      why:
+        description: "Why are you interested in this place?"
+        required: true
+        type: string
+      questions:
+        description: "Specific questions or details (optional)"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  resolve:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.issue.labels.*.name, 'place-request')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      # Untrusted text is passed through the environment only, never pasted into a script.
+      IN_PLACE: ${{ inputs.place }}
+      IN_THEME: ${{ inputs.theme }}
+      IN_WHY: ${{ inputs.why }}
+      IN_QUESTIONS: ${{ inputs.questions }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pandas pyarrow
+
+      - name: Open the issue (manual run only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          gh api "repos/$REPO/labels" -f name=place-request -f color=d35400 >/dev/null 2>&1 || true
+          python3 - <<'PY'
+          import os
+          body = "\n\n".join([
+              "### Place", os.environ["IN_PLACE"],
+              "### Theme", os.environ["IN_THEME"],
+              "### Why are you interested in this place?", os.environ["IN_WHY"],
+              "### Specific questions or details", os.environ.get("IN_QUESTIONS") or "_No response_"])
+          open("body.md", "w").write(body + "\n")
+          open("title.txt", "w").write("Place request: " + os.environ["IN_PLACE"][:80].replace("\n", " "))
+          PY
+          gh issue create --repo "$REPO" --title "$(cat title.txt)" --body-file body.md --label place-request > issue_url.txt
+          echo "ISSUE_NUMBER=$(basename "$(cat issue_url.txt)")" >> "$GITHUB_ENV"
+          echo "PLACE_QUERY<<EOF_PLACE" >> "$GITHUB_ENV"
+          printf '%s\n' "$IN_PLACE" | head -n 1 >> "$GITHUB_ENV"
+          echo "EOF_PLACE" >> "$GITHUB_ENV"
+
+      - name: Read the place from the issue form
+        if: github.event_name == 'issues'
+        run: |
+          python3 - <<'PY'
+          import os, re
+          body = os.environ.get("ISSUE_BODY") or ""
+          m = re.search(r"### Place\s*\n+(.+)", body)
+          place = (m.group(1).strip() if m else "")[:200]
+          place = re.sub(r"[\r\n]", " ", place)
+          with open(os.environ["GITHUB_ENV"], "a") as f:
+              f.write("PLACE_QUERY<<EOF_PLACE\n" + place + "\nEOF_PLACE\n")
+          PY
+
+      - name: Search theLIST open data
+        run: |
+          if [ -z "$PLACE_QUERY" ]; then
+            echo "No place was found in the request. Please edit the issue and give a property name, address or property ID." > comment.md
+          else
+            python3 scripts/resolve.py "$PLACE_QUERY" > comment.md
+          fi
+
+      - name: Comment with the candidates
+        run: gh issue comment "$ISSUE_NUMBER" --repo "$REPO" --body-file comment.md

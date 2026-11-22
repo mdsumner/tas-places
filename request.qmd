@@ -1,0 +1,31 @@
+---
+title: "Request a place"
+---
+
+There are two ways to ask for a place to be added, or for a question about an existing place to be looked at. Both end up as an issue in the repository, which is where the work is tracked.
+
+## 1. Open a request issue
+
+Use the [place request form](https://github.com/mdsumner/tas-places/issues/new?template=place-request.yml). It asks for:
+
+- **the place**: a property name, an address, or a property ID;
+- **the theme**: properties, geotech, or something new;
+- **why you are interested**: this decides which sources are used;
+- **specific questions or details**: anything you already know, or want checked.
+
+## 2. Run the workflow with an address
+
+In the repository's **Actions** tab, choose **Place request**, then **Run workflow**, and enter the place, theme and reason. The workflow opens the issue for you.
+
+## What happens next
+
+1. **Resolve (automatic).** A workflow searches theLIST address points, heritage register and gazetteer for the place, and comments on the issue with the candidates it found: name, locality, property ID, area. Names are often shared by several properties, so this step lists them all.
+2. **Confirm.** Someone replies on the issue saying which candidate is meant, or corrects the search.
+3. **Extract and research.** The place is added to `data/seeds.csv` if it is not already in the queue, the extraction is re-run, and sourced claims are added to `data/claims.csv`. For a themed report, a report page is written.
+4. **Review.** The work arrives as a pull request that references the issue. Merging it publishes the pages.
+
+Step 1 runs by itself. Steps 3 and 4 are done on request, in batches.
+
+## Corrections
+
+To correct a fact or a claim, open an ordinary issue and name the place and the claim id (for example `c0020`). A correction with a source is the most useful kind.

@@ -1,0 +1,14 @@
+---
+title: "Properties"
+listing:
+  id: reports
+  contents: "*.qmd"
+  type: default
+  sort: "title"
+  fields: [title, description, categories]
+---
+
+Reports with a general focus on one property: where and what it is, its history and structures, its terrain and imagery, and why it can be hard to find on theLIST.
+
+:::{#reports}
+:::
