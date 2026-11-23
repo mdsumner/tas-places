@@ -1,6 +1,7 @@
 /_site/
 /.quarto/
 /places/*.qmd
+/families.qmd
 __pycache__/
 *.pyc
 /mirror/

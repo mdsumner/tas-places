@@ -25,6 +25,7 @@ and places link to each other.
 | `data/places.parquet`, `places.csv` | one row per extracted place |
 | `data/place_*.parquet` | titles, zones, fires, features, watercourses, heritage, links, outlines |
 | `data/claims.csv` | sourced history claims, keyed by PID |
+| `data/holders.csv` | historical holders over time (grantees, owners, lessees, managers), sourced |
 | `data/seeds.csv` | places added to the queue by hand |
 | `data/reports.csv` | which report covers which places, by theme |
 | `scripts/` | `build_queue.py`, `extract.py`, `build_site.py`, `resolve.py`, `fetch_mirror.sh` |
@@ -69,7 +70,7 @@ A workflow replies with the candidates it finds in theLIST data.
 
 ## Rules
 
-- No ownership and no living people, beyond what a cited public source already states.
+- No current ownership and no living people. Historical holders come from published sources only.
 - Every history claim has a source. Secondary sources are flagged.
 - Inference is labelled as inference.
 

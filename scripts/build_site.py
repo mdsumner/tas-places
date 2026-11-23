@@ -21,6 +21,7 @@ rivers = pd.read_parquet(f"{D}/place_watercourses.parquet")
 heritage = pd.read_parquet(f"{D}/place_heritage.parquet")
 links = pd.read_parquet(f"{D}/place_links.parquet")
 claims = pd.read_csv(f"{D}/claims.csv", dtype={"year": "Int64"})
+holders = pd.read_csv(f"{D}/holders.csv", dtype={"from_year": "Int64", "to_year": "Int64"})
 reports = pd.read_csv(f"{D}/reports.csv", dtype=str).fillna("")
 seeds = pd.read_csv(f"{D}/seeds.csv")
 outlines = {f["properties"]["PID"]: f for f in json.load(open(f"{D}/place_outlines.geojson"))["features"]}
@@ -29,7 +30,7 @@ rep_pids = {}
 for _, r in reports.iterrows():
     for pid in r.pids.split():
         rep_pids.setdefault(int(pid), []).append(r)
-featured = set(claims.PID) | set(rep_pids) | set(seeds.PID)
+featured = set(claims.PID) | set(holders.PID) | set(rep_pids) | set(seeds.PID)
 featured &= set(places.PID)
 P = places.set_index("PID")
 
@@ -126,6 +127,19 @@ def page(pid):
         out.append("No sourced history has been added yet. See [how to request an addition](../request.qmd).")
     out.append("")
 
+    hd = holders[holders.PID == pid].sort_values(["from_year", "to_year"], na_position="last")
+    if len(hd):
+        out.append("## Holders over time\n")
+        out.append("Historical holders from published sources, one sourced row each (`data/holders.csv`). "
+                   "This table does not say who holds the place now. See [families](../families.qmd) for links between places.\n")
+        out.append("| From | To | Holder | Role | Subject | Source |\n|---|---|---|---|---|---|")
+        for _, x in hd.iterrows():
+            fy = "" if pd.isna(x.from_year) else int(x.from_year)
+            ty = "" if pd.isna(x.to_year) else int(x.to_year)
+            note = f" *{esc(x.note)}*" if pd.notna(x.note) else ""
+            out.append(f"| {fy} | {ty} | {esc(x.holder)} | {esc(x.role)}{note} | {esc(x.subject)} | [{esc(x.source)}]({x.source_url}) |")
+        out.append("")
+
     l = links[(links.PID_a == pid) | (links.PID_b == pid)].copy()
     if len(l):
         l["other"] = l.PID_b.where(l.PID_a == pid, l.PID_a)
@@ -195,4 +209,22 @@ for _, r in places.sort_values("rank").head(40).iterrows():
     nm = f"[{r.display_name}]({r.slug}.qmd)" if r.PID in featured else r.display_name
     idx.append(f"| {int(r['rank'])} | {nm} | {str(r.locality).title() if pd.notna(r.locality) else ''} | {r.municipality} | {r.area_ha:,.1f} | {r.km_from_hobart} |")
 open("places/index.qmd", "w").write("\n".join(idx) + "\n")
+# --- families page: holders grouped by family name, linking places
+fm = ["---", "title: Families and holders", "---\n",
+      "Historical holders of places, grouped by family name, from `data/holders.csv`. Every row has a source on the place page. "
+      "A family appearing at more than one place is a link between those places.\n",
+      "This page records history from published sources. It does not say who holds any place now, "
+      "and it leaves out living people.\n"]
+for family, g in sorted(holders.groupby("family"), key=lambda kv: (-kv[1].PID.nunique(), kv[0])):
+    n = g.PID.nunique()
+    fm.append(f"## {family}\n")
+    fm.append(f"{n} place{'s' if n > 1 else ''}.\n")
+    fm.append("| From | To | Holder | Role | Place |\n|---|---|---|---|---|")
+    for _, x in g.sort_values(["from_year", "to_year"], na_position="last").iterrows():
+        fy = "" if pd.isna(x.from_year) else int(x.from_year)
+        ty = "" if pd.isna(x.to_year) else int(x.to_year)
+        ref = f"[{P.display_name[x.PID]}](places/{P.slug[x.PID]}.qmd)" if x.PID in featured else str(x.PID)
+        fm.append(f"| {fy} | {ty} | {esc(x.holder)} | {esc(x.role)} | {ref} ({esc(x.subject)}) |")
+    fm.append("")
+open("families.qmd", "w").write("\n".join(fm) + "\n")
 print("wrote", len(featured), "place pages")
