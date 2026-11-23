@@ -21,7 +21,7 @@ More themes can be added as questions arise, for example climate and weather rec
 
 Places are worked through from a [ranked queue](places/index.qmd#next-in-the-queue): larger properties first, with a bias towards those closer to Hobart. Anyone can [request a place](request.qmd) or add a question about one.
 
-As places are added they link to each other through shared rivers, boundaries, fires and named features, and later through people and events in their histories.
+As places are added they link to each other through shared rivers, boundaries, fires and named features, and through the [families](families.qmd) who held them.
 
 ## What it is not
 

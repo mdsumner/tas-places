@@ -21,7 +21,8 @@ A place is a property ID (PID) in theLIST cadastre: one or more freehold titles 
 
 ## Rules
 
-- **No ownership.** Current owners are not recorded, and are not in the open data.
+- **No current ownership.** Who holds a place now is not recorded, and is not in the open data.
+- **Historical holders only.** `data/holders.csv` records grantees, owners, lessees and managers from published sources, where the tenure began before 1950 or the cited source records the holder's death. Each row is sourced. An open-ended row records an acquisition, not a present-day holder.
 - **No living people**, beyond what is already on the public record in the cited source.
 - **Aboriginal history** is recorded only as the cited sources state it, with the source named. It needs more care and consultation than this project has yet given it.
 - **Inference is labelled.** Where a match is a judgement (which building is the homestead, where a tunnel is), the page says so.
@@ -36,7 +37,7 @@ A place is a property ID (PID) in theLIST cadastre: one or more freehold titles 
 
 | Path | Holds |
 |---|---|
-| `data/` | the tables (Parquet), `claims.csv`, `seeds.csv`, `reports.csv` |
+| `data/` | the tables (Parquet), `claims.csv`, `holders.csv`, `seeds.csv`, `reports.csv` |
 | `scripts/` | queue, extraction, site generation, and the request resolver |
 | `properties/`, `geotech/` | reports, one folder per theme |
 | `places/` | generated place pages (built by `scripts/build_site.py`, not committed) |

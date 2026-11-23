@@ -16,6 +16,8 @@ website:
     left:
       - text: Places
         href: places/index.qmd
+      - text: Families
+        href: families.qmd
       - text: Properties
         href: properties/index.qmd
       - text: Geotech
